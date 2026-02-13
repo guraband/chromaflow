@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChromaFlow - 이미지 팔레트 생성기</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <p class="badge">ChromaFlow</p>
+        <h1>이미지에서 모던 웹 팔레트 자동 생성</h1>
+        <p>
+          이미지를 업로드하면 주요 색상을 분석해 Base / Surface / Accent가 포함된
+          웹 디자인용 토큰 팔레트를 만듭니다.
+        </p>
+      </header>
+
+      <section class="panel upload-panel" aria-label="이미지 업로드 설정">
+        <label for="imageInput" class="upload-area" id="dropZone">
+          <input type="file" id="imageInput" accept="image/*" />
+          <span class="upload-title">이미지를 드래그하거나 클릭해서 업로드</span>
+          <span class="upload-sub">JPG, PNG, WEBP, GIF 지원 · 브라우저 로컬 처리</span>
+        </label>
+        <p class="status-message" id="statusMessage" aria-live="polite">
+          이미지를 업로드하면 색상 팔레트를 생성합니다.
+        </p>
+        <div class="controls">
+          <label for="colorCount">
+            추출 색상 수
+            <input
+              type="range"
+              id="colorCount"
+              min="4"
+              max="10"
+              value="6"
+              aria-describedby="colorCountValue"
+            />
+            <strong id="colorCountValue">6</strong>
+          </label>
+          <button id="downloadBtn" disabled>팔레트 JSON 다운로드</button>
+        </div>
+      </section>
+
+      <section class="panel preview-panel" aria-label="이미지 미리보기">
+        <div class="image-preview" id="imagePreview">업로드된 이미지 미리보기</div>
+        <canvas id="workCanvas" hidden></canvas>
+      </section>
+
+      <section class="panel palette-panel" aria-label="추천 팔레트">
+        <h2>추천 팔레트</h2>
+        <div id="paletteGrid" class="palette-grid"></div>
+      </section>
+    </main>
+
+    <template id="swatchTemplate">
+      <article class="swatch-card">
+        <div class="swatch-color"></div>
+        <div class="swatch-info">
+          <p class="swatch-role"></p>
+          <p class="swatch-hex"></p>
+          <p class="swatch-contrast"></p>
+          <button class="copy-btn" type="button">복사</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
