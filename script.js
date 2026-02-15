@@ -48,6 +48,26 @@ dropZone.addEventListener('drop', (event) => {
   setStatus('이미지 파일만 업로드할 수 있습니다.', 'warning');
 });
 
+document.addEventListener('paste', (event) => {
+  const items = event.clipboardData?.items;
+  if (!items?.length) {
+    return;
+  }
+
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      const file = item.getAsFile();
+      if (file) {
+        event.preventDefault();
+        handlePastedImage(file);
+      }
+      return;
+    }
+  }
+
+  setStatus('클립보드에 이미지가 없습니다. 이미지를 복사한 뒤 다시 붙여넣기 해주세요.', 'warning');
+});
+
 downloadBtn.addEventListener('click', () => {
   const data = {
     generatedAt: new Date().toISOString(),
@@ -89,6 +109,13 @@ async function handleFile(file) {
     downloadBtn.disabled = true;
     setStatus('이미지를 처리하지 못했습니다. 다른 파일을 시도해주세요.', 'error');
   }
+}
+
+function handlePastedImage(file) {
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(file);
+  imageInput.files = dataTransfer.files;
+  handleFile(file);
 }
 
 function setStatus(message, kind) {
